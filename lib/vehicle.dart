@@ -1,50 +1,54 @@
+// lib/vehicle.dart
 class Vehicle {
   final String brand;
   final String model;
-  double _speed; // private field for current speed
-  int _year;     // private field for manufacturing year
+  int _year;
+  double _speed;
 
   Vehicle({
     required this.brand,
     required this.model,
-    double speed = 0,
     required int year,
-  })  : _speed = speed,
-        _year = year;
+    double speed = 0,
+  })  : _year = year,
+        _speed = speed;
 
-  // Getter and Setter for year with validation
+  // Getter and setter for _year (with validation)
   int get year => _year;
   set year(int value) {
-    if (value < 1886) { // The first car was invented around 1886
-      throw ArgumentError('Year cannot be before 1886.');
+    if (value < 1886) { // The first car was invented in 1886
+      throw ArgumentError('Year must be 1886 or later.');
     }
     _year = value;
   }
 
-  // Getter for speed (read-only)
+  // Getter for speed
   double get speed => _speed;
 
-  // Method to accelerate
+  // Method 1: accelerate
   void accelerate(double increment) {
-    if (increment < 0) {
-      print('Cannot accelerate by negative value.');
+    if (increment <= 0) {
+      print('Acceleration must be positive.');
       return;
     }
     _speed += increment;
-    print('$brand $model accelerates by $increment km/h → speed: $_speed km/h');
+    print('$brand $model accelerated by $increment km/h. New speed: $_speed km/h');
   }
 
-  // Method to brake
+  // Method 2: brake
   void brake(double decrement) {
-    if (decrement < 0) {
-      print('Cannot brake by negative value.');
+    if (decrement <= 0) {
+      print('Brake decrement must be positive.');
       return;
     }
-    _speed -= decrement;
-    if (_speed < 0) _speed = 0;
-    print('$brand $model brakes by $decrement km/h → speed: $_speed km/h');
+    if (decrement > _speed) {
+      _speed = 0;
+    } else {
+      _speed -= decrement;
+    }
+    print('$brand $model slowed down by $decrement km/h. New speed: $_speed km/h');
   }
 
-  // Description method
-  String info() => '$brand $model ($year) → Speed: $_speed km/h';
+  // Info method
+  String info() => '$brand $model ($year) - Speed: $_speed km/h';
 }
